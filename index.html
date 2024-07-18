@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Searchlight Using Canvas</title>
+	<style type="text/css">
+		html, body {
+			height:100%;
+			width:100%;
+			margin: 0;
+		}
+
+		body{
+			background: url(bg.png);
+			background-size:100% 100%;
+		}
+
+		canvas {
+			position: absolute;
+			top:0;
+			left:0;
+			height:100%;
+			width:100%;
+		}
+	</style>
+</head>
+<body>
+	<canvas></canvas>
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var canvas2 = document.querySelector('canvas');
+			ctx2 = canvas2.getContext('2d');
+			canvas2.width = window.innerWidth;
+			canvas2.height = window.innerHeight;
+			
+			function drawSearchLight(x, y){
+				var radius = canvas2.height/3;
+				// ctx2.globalCompositeOperation = "source-over";
+				ctx2.clearRect(0,0,canvas2.width, canvas2.height);
+				ctx2.fillStyle = 'rgba(0, 0, 0, 1)';
+				ctx2.fillRect(0,0,canvas2.width, canvas2.height);
+				ctx2.beginPath();				
+				ctx2.globalCompositeOperation = "destination-out";
+				// ctx2.fillStyle = 'rgba(255,0,0,1)';
+				ctx2.arc(x, y, radius, 0, Math.PI * 2, false);
+				ctx2.fill();
+				ctx2.globalCompositeOperation = "source-over";
+				// ctx2.fillStyle = 'rgba(255,255,255,0.7)';
+
+				var grd = ctx2.createRadialGradient(x, y, 0, x, y, radius);
+				grd.addColorStop(0,"rgba(0, 0, 0, 0)");
+				grd.addColorStop(1,"rgba(0, 0, 0, 1)");
+				ctx2.arc(x, y, 10*radius, 0, Math.PI * 2, false);
+				ctx2.fillStyle = grd;
+				ctx2.arc(x, y, radius, 0, Math.PI * 2, false);
+				ctx2.fill();
+				ctx2.closePath();
+			}
+
+			$('canvas').on('mousemove', function(e){
+				drawSearchLight(e.pageX, e.pageY)
+			});
+
+			drawSearchLight(300, 300);
+		});
+	</script>
+</body>
+</html>
